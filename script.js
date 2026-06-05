@@ -1,4 +1,4 @@
-// Initial Core Architecture Arrays Setup
+// Initial Menu Setup
 const defaultStructuredItems = [
     { name: "Chicken Biryani", category: "Rice", weight: 0 },
     { name: "Beef Biryani", category: "Rice", weight: 0 },
@@ -10,7 +10,7 @@ const defaultStructuredItems = [
     { name: "Chapati", category: "Bread", weight: 0 }
 ];
 
-// Persistent States Mapping Initialization via LocalStorage API
+// Load Local Storage Data
 let customItems = JSON.parse(localStorage.getItem('categorizedMenu')) || defaultStructuredItems;
 let currentActiveCategory = "All";
 
@@ -21,16 +21,16 @@ let allTimeHistory = JSON.parse(localStorage.getItem('allTimeHistory')) || [];
 let knownCustomers = JSON.parse(localStorage.getItem('knownCustomers')) || [];
 let shiftStartTime = localStorage.getItem('shiftStartTime') || null;
 
-// Incremental Token Counter Seed Matrix Tracking Tracker
+// Token Tracker
 let nextGlobalTokenId = parseInt(localStorage.getItem('nextGlobalTokenId')) || 1001;
 
-// Internal Void Query Workspace Buffer Reference Holders
+// Modals State Trackers
 let activeVoidTargetIndex = null;
 let activeCallback = null;
 let requiredPinType = 'refund'; 
 let activeCustomerSearchQuery = "";
 
-// System Normalizer Engine Logic Modules
+// Date Formatting
 function getFormattedSystemDate(dateObj = new Date()) {
     const day = dateObj.getDate();
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -44,7 +44,7 @@ function normalizeToSystemDate(rawDateString) {
     return isNaN(parsedDate.getTime()) ? rawDateString : getFormattedSystemDate(parsedDate);
 }
 
-// Workspace Swapping Engine
+// Navigation Tabs
 function switchView(tabId) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
     document.getElementById(tabId).classList.add('active');
@@ -54,7 +54,7 @@ function switchView(tabId) {
     if (tabId === 'history-tab' || tabId === 'logs-tab') renderLogs();
 }
 
-// Security Checkpoint Operational Management Modals
+// Security PIN Modal
 function openPinModal(title, type, successCallback) {
     document.getElementById('modal-title-text').innerText = title;
     document.getElementById('modal-pin-input').value = '';
@@ -77,20 +77,20 @@ function submitPinModal() {
         if (activeCallback) activeCallback();
         activeCallback = null;
     } else {
-        alert("Security failure. Operation Denied.");
+        alert("Incorrect PIN.");
         document.getElementById('modal-pin-input').value = '';
     }
 }
 
 function attemptOpenCustomers() {
-    openPinModal("Enter Management Keys to Unlock Configuration Panel", "admin", function() {
+    openPinModal("Enter Admin PIN", "admin", function() {
         switchView('customers-tab');
         renderCustomerManagement();
         populateMergeDropdowns();
     });
 }
 
-// NEW INTERACTIVE POS COUNTER VOID LOGIC SYSTEM
+// POS Void System
 function openPosVoidModal() {
     document.getElementById('void-token-number-input').value = '';
     document.getElementById('pos-void-input-modal').style.display = 'flex';
@@ -104,30 +104,28 @@ function closePosVoidModal() {
 function submitPosVoidLookup() {
     let lookupId = parseInt(document.getElementById('void-token-number-input').value.trim());
     if (isNaN(lookupId)) {
-        alert("Please enter a valid numeric token ID sequence.");
+        alert("Please enter a valid token number.");
         return;
     }
     
-    // Scan current day shift register array logs trace to lock index position
     let logIdx = currentDayLog.findIndex(log => log.tokenId === lookupId);
     if (logIdx === -1) {
-        alert(`Token record assignment reference #${lookupId} not found inside current shift trace buffers.`);
+        alert(`Token #${lookupId} not found in today's active logs.`);
         return;
     }
     
     activeVoidTargetIndex = logIdx;
     let targetedRecord = currentDayLog[logIdx];
     
-    // Close selection screen and render live visual confirm dashboard payload metrics
     closePosVoidModal();
     
     let container = document.getElementById('void-confirmation-details-box');
     container.innerHTML = `
-        <div class="confirm-row"><span>Token Identifier ID:</span><strong class="pill-token">#${targetedRecord.tokenId}</strong></div>
-        <div class="confirm-row"><span>Log Creation Time:</span><strong>${targetedRecord.time}</strong></div>
-        <div class="confirm-row"><span>Assigned Profile Holder:</span><strong>${targetedRecord.customer}</strong></div>
-        <div class="confirm-row"><span>Target Menu Allocation:</span><strong style="color:var(--primary);">${targetedRecord.item}</strong></div>
-        <div class="confirm-row"><span>Buffered Quantity Multiplier:</span><strong style="font-size:16px; color:var(--danger);">x${targetedRecord.qty}</strong></div>
+        <div class="confirm-row"><span>Token Number:</span><strong class="pill-token">#${targetedRecord.tokenId}</strong></div>
+        <div class="confirm-row"><span>Time:</span><strong>${targetedRecord.time}</strong></div>
+        <div class="confirm-row"><span>Customer:</span><strong>${targetedRecord.customer}</strong></div>
+        <div class="confirm-row"><span>Item:</span><strong style="color:var(--primary);">${targetedRecord.item}</strong></div>
+        <div class="confirm-row"><span>Quantity:</span><strong style="font-size:16px; color:var(--danger);">x${targetedRecord.qty}</strong></div>
     `;
     
     document.getElementById('pos-void-confirm-modal').style.display = 'flex';
@@ -141,13 +139,11 @@ function closePosVoidConfirmModal() {
 function executeConfirmedPosVoid() {
     if (activeVoidTargetIndex === null) return;
     
-    // Route control processing flow parameters directly through supervisor PIN barrier
-    openPinModal("Verification authorization credentials requested.", "refund", function() {
+    openPinModal("Enter Manager PIN to Void", "refund", function() {
         let now = new Date();
         let refundTime = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         let matchedTargetItem = currentDayLog[activeVoidTargetIndex];
         
-        // Construct void object payload data matrix nodes
         let voidRecordObject = {
             tokenId: matchedTargetItem.tokenId,
             time: refundTime,
@@ -156,7 +152,6 @@ function executeConfirmedPosVoid() {
             customer: matchedTargetItem.customer || "Walk-In"
         };
         
-        // Mutate registries
         currentRefundLog.push(voidRecordObject);
         localStorage.setItem('currentRefundLog', JSON.stringify(currentRefundLog));
         
@@ -167,11 +162,11 @@ function executeConfirmedPosVoid() {
         updateLiveBreakdown();
         renderLogs();
         
-        alert(`Data mutation confirmation finalized. Token Instance #${voidRecordObject.tokenId} successfully voided on-screen.`);
+        alert(`Success. Token #${voidRecordObject.tokenId} voided.`);
     });
 }
 
-// Token Printing Operations Hub (Prints Token Number, No Weight)
+// Token Printing
 function printTokens() {
     if (Object.keys(currentCart).length === 0) return;
     openCustomerModal();
@@ -193,7 +188,6 @@ function executeTokenPrinting(customerName) {
         let qty = currentCart[item];
         let currentAssignedTokenId = nextGlobalTokenId++;
         
-        // Commit newly assigned instances directly into structural live transaction index records
         currentDayLog.push({ 
             tokenId: currentAssignedTokenId, 
             time: timeStr, 
@@ -206,20 +200,19 @@ function executeTokenPrinting(customerName) {
         token.className = 'pos-token';
         token.innerHTML = `
             <div class="brand-main">AHMED HANIF RAJPUT</div>
-            <div style="font-size: 16px; font-weight: 900; text-align: center; background: #000; color: #fff; padding: 4px 0; margin: 4px 0;">TOKEN ID: #${currentAssignedTokenId}</div>
+            <div style="font-size: 16px; font-weight: 900; text-align: center; background: #000; color: #fff; padding: 4px 0; margin: 4px 0;">TOKEN NO: #${currentAssignedTokenId}</div>
             <div class="pos-divider"></div>
             <div class="item-container">
                 <div class="pos-item">${item}</div>
-                <div class="pos-qty">UNITS COUNT: [ ${qty} ]</div>
+                <div class="pos-qty">QTY: [ ${qty} ]</div>
             </div>
             <div class="pos-divider"></div>
             <div class="meta-line">DATE: ${dateStr} &nbsp;&nbsp;&nbsp;&nbsp; TIME: ${timeStr}</div>
-            <div style="font-size:12px; font-weight:900; margin-top:4px; text-transform:uppercase;">ACCOUNT MAPPING: ${customerName}</div>
+            <div style="font-size:12px; font-weight:900; margin-top:4px; text-transform:uppercase;">NAME: ${customerName}</div>
         `;
         printArea.appendChild(token);
     }
     
-    // Save live operational system state tracking arrays permanently to localized storage
     localStorage.setItem('currentDayLog', JSON.stringify(currentDayLog));
     localStorage.setItem('nextGlobalTokenId', nextGlobalTokenId.toString());
     
@@ -231,7 +224,7 @@ function executeTokenPrinting(customerName) {
     }, 50);
 }
 
-// POS Desktop Interface Core Component UI Render Engines
+// POS Desktop Interface
 function renderCategoryFilters() {
     const container = document.getElementById('category-filter-container');
     container.innerHTML = '';
@@ -259,7 +252,7 @@ function getItemWeight(itemName) {
     return found && found.weight ? parseFloat(found.weight) : 0;
 }
 
-// Levenshtein Logic Engine (For Identity Selection Auto-matching)
+// Search Matching
 function getLevenshteinDistance(a, b) {
     if (a.length === 0) return b.length; if (b.length === 0) return a.length;
     const matrix = [];
@@ -331,7 +324,7 @@ function changeQty(item, amount) {
 function updateLiveBreakdown() {
     const container = document.getElementById('live-total-container');
     if (currentDayLog.length === 0 && currentRefundLog.length === 0) {
-        container.innerHTML = '<p style="color:#94a3b8; text-align:center; margin:0; font-size:13px;">Live operational transaction vectors empty.</p>';
+        container.innerHTML = '<p style="color:#94a3b8; text-align:center; margin:0; font-size:13px;">No items sold yet.</p>';
         return;
     }
     let grossCount = 0; let refundCount = 0; let itemTotals = {};
@@ -344,16 +337,16 @@ function updateLiveBreakdown() {
         <div style="font-size:13px; margin-bottom:12px; color:var(--text-muted);">
             <div style="font-size:11px; font-weight:700; color:var(--primary); margin-bottom:6px;">${rangeStr}</div>
             <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                <span>Gross Generated Logs:</span><span style="font-weight:600; color:var(--text-main);">${grossCount + refundCount} Units</span>
+                <span>Total Items (Before Void):</span><span style="font-weight:600; color:var(--text-main);">${grossCount + refundCount} Units</span>
             </div>
             <div style="display:flex; justify-content:space-between; margin-bottom:4px; color:var(--danger);">
-                <span>Liquidated Void Logs:</span><span style="font-weight:600;">-${refundCount} Units</span>
+                <span>Voided Items:</span><span style="font-weight:600;">-${refundCount} Units</span>
             </div>
             <div style="display:flex; justify-content:space-between; font-weight:800; border-top:1px solid var(--border); padding-top:6px; font-size:14px; color:var(--accent);">
-                <span>Net Verified Shift Inventory:</span><span>${grossCount} Units</span>
+                <span>Net Sold Items:</span><span>${grossCount} Units</span>
             </div>
         </div>
-        <div style="font-weight:700; font-size:11px; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; border-bottom:1px solid var(--border); padding-bottom:4px;">Dynamic Mass Metrics Breakdown</div>
+        <div style="font-weight:700; font-size:11px; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; border-bottom:1px solid var(--border); padding-bottom:4px;">Item Breakdown</div>
         <table style="width:100%; font-size:13px; color:var(--text-main); border-collapse:collapse;">
     `;
 
@@ -378,12 +371,12 @@ function updateLiveBreakdown() {
     container.innerHTML = html;
 }
 
-// LOGS RENDERING HUB (Shows precise details including generated Token Number ID keys)
+// LOGS SYSTEM
 function renderLogs() {
     const logBody = document.getElementById('live-log');
     logBody.innerHTML = '';
     if(currentDayLog.length === 0){ 
-        logBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#94a3b8; padding:20px; font-size:13px;">No item array stream signals captured.</td></tr>`; 
+        logBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#94a3b8; padding:20px; font-size:13px;">No items.</td></tr>`; 
     }
     
     for(let i = currentDayLog.length - 1; i >= 0; i--) {
@@ -401,7 +394,7 @@ function renderLogs() {
     const refundBody = document.getElementById('refund-log');
     refundBody.innerHTML = '';
     if(currentRefundLog.length === 0) { 
-        refundBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#94a3b8; padding:20px; font-size:13px;">No historical void signals logs generated.</td></tr>`; 
+        refundBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#94a3b8; padding:20px; font-size:13px;">No voided items.</td></tr>`; 
     }
     
     for(let j = currentRefundLog.length - 1; j >= 0; j--) {
@@ -424,7 +417,7 @@ function renderVaultLedgerCards() {
     const histContainer = document.getElementById('history-container');
     histContainer.innerHTML = '';
     if(allTimeHistory.length === 0) { 
-        histContainer.innerHTML = '<p style="color:#94a3b8; text-align:center; font-size:14px; padding-top:20px; width:100%;">Vault ledger history index empty array structure.</p>'; 
+        histContainer.innerHTML = '<p style="color:#94a3b8; text-align:center; font-size:14px; padding-top:20px; width:100%;">History is empty.</p>'; 
     }
     
     allTimeHistory.forEach((day, index) => {
@@ -462,7 +455,7 @@ function renderVaultLedgerCards() {
     });
 }
 
-// User Configuration Panels Rendering Rules
+// User Configuration Panels
 function populateCustomerDatalist() {
     const dataList = document.getElementById('customer-memory-list');
     if(!dataList) return; dataList.innerHTML = '';
@@ -475,8 +468,8 @@ function populateMergeDropdowns() {
     let srcSelect = document.getElementById('merge-source-select');
     let tgtSelect = document.getElementById('merge-target-select');
     if(!srcSelect || !tgtSelect) return;
-    srcSelect.innerHTML = '<option value="">-- Merge From (Duplicate Profile) --</option>';
-    tgtSelect.innerHTML = '<option value="">-- Merge To (Primary Master Profile) --</option>';
+    srcSelect.innerHTML = '<option value="">-- Merge From --</option>';
+    tgtSelect.innerHTML = '<option value="">-- Merge To --</option>';
     let sortedCustomers = [...knownCustomers].sort();
     sortedCustomers.forEach(cust => {
         srcSelect.innerHTML += `<option value="${cust}">${cust}</option>`;
@@ -489,12 +482,12 @@ function renderCustomerManagement() {
     if(!listDiv) return; listDiv.innerHTML = '';
     let filteredCustomers = knownCustomers.filter(cust => cust.toLowerCase().includes(activeCustomerSearchQuery));
     if (filteredCustomers.length === 0) {
-        listDiv.innerHTML = '<p style="color:var(--text-muted); padding: 12px 0;">No matching identity profiles found.</p>'; return;
+        listDiv.innerHTML = '<p style="color:var(--text-muted); padding: 12px 0;">No matching names found.</p>'; return;
     }
-    let table = `<table class="styled-table"><thead><tr><th>Account Name Label</th><th style="text-align:right; width:90px;">Control</th></tr></thead><tbody>`;
+    let table = `<table class="styled-table"><thead><tr><th>Customer Name</th><th style="text-align:right; width:90px;">Action</th></tr></thead><tbody>`;
     filteredCustomers.forEach((cust) => {
         let actualIndex = knownCustomers.indexOf(cust);
-        table += `<tr><td style="font-weight:600;">${cust}</td><td style="text-align:right;"><button class="btn-danger-outline" style="padding:4px 8px; font-size:11px;" onclick="deleteCustomer(${actualIndex})">Purge</button></td></tr>`;
+        table += `<tr><td style="font-weight:600;">${cust}</td><td style="text-align:right;"><button class="btn-danger-outline" style="padding:4px 8px; font-size:11px;" onclick="deleteCustomer(${actualIndex})">Delete</button></td></tr>`;
     });
     table += `</tbody></table>`; listDiv.innerHTML = table;
 }
@@ -503,7 +496,7 @@ function executeCustomerMerge() {
     let source = document.getElementById('merge-source-select').value;
     let target = document.getElementById('merge-target-select').value;
     if(!source || !target || source === target) return alert("Select distinct source/target profiles.");
-    if(!confirm(`Merge "${source}" cleanly into "${target}"?`)) return;
+    if(!confirm(`Merge "${source}" into "${target}"?`)) return;
     currentDayLog.forEach(log => { if(log.customer === source) log.customer = target; });
     currentRefundLog.forEach(log => { if(log.customer === source) log.customer = target; });
     let srcIdx = knownCustomers.indexOf(source); if(srcIdx > -1) knownCustomers.splice(srcIdx, 1);
@@ -524,7 +517,7 @@ function addCustomerManually() {
 }
 
 function deleteCustomer(index) {
-    if (confirm(`Wipe identity mapping block trace?`)) {
+    if (confirm(`Delete this customer?`)) {
         knownCustomers.splice(index, 1); localStorage.setItem('knownCustomers', JSON.stringify(knownCustomers));
         populateCustomerDatalist(); populateMergeDropdowns(); renderCustomerManagement();
     }
@@ -544,7 +537,7 @@ function closeCustomerModal() { document.getElementById('customer-name-modal').s
 
 function submitCustomerModal() {
     let rawName = document.getElementById('cust-modal-name-input').value.trim();
-    if (rawName === "") return alert("Valid identity label required.");
+    if (rawName === "") return alert("Please enter a name.");
     let finalName = ""; let matchedName = findClosestCustomerName(rawName);
     if (matchedName) finalName = matchedName;
     else {
@@ -556,34 +549,34 @@ function submitCustomerModal() {
 }
 
 function deleteHistoryItem(index) {
-    if (!confirm("Permanently drop selected ledger sequence index container?")) return;
-    openPinModal("Management validation rules active.", "admin", function() {
+    if (!confirm("Permanently delete this history record?")) return;
+    openPinModal("Enter Admin PIN", "admin", function() {
         allTimeHistory.splice(index, 1); localStorage.setItem('allTimeHistory', JSON.stringify(allTimeHistory));
         renderLogs();
     });
 }
 
 function clearAllHistory() {
-    if (!confirm("Purge entire core relational historical index architecture? Action terminal.")) return;
-    openPinModal("Administrative security credentials requested.", "admin", function() {
+    if (!confirm("Clear ALL history? This cannot be undone.")) return;
+    openPinModal("Enter Admin PIN", "admin", function() {
         allTimeHistory = []; localStorage.setItem('allTimeHistory', JSON.stringify(allTimeHistory));
         renderLogs();
     });
 }
 
 function attemptStartNewDay() {
-    openPinModal("Enter Mandatory Master Access Code to Open New Day Block", "admin", function() {
+    openPinModal("Enter Admin PIN", "admin", function() {
         currentDayLog = []; currentRefundLog = []; shiftStartTime = null;
         localStorage.removeItem('currentDayLog'); localStorage.removeItem('currentRefundLog'); localStorage.removeItem('shiftStartTime');
         currentCart = {}; renderCart(); renderLogs(); switchView('pos-tab');
-        alert("New operational tracking register open.");
+        alert("New Shift Started.");
     });
 }
 
 function endDay() {
-    if (currentDayLog.length === 0 && currentRefundLog.length === 0) return alert("System state registry empty.");
-    if (!confirm("Terminate current runtime cycle shift datasets?")) return;
-    openPinModal("Administrative checkpoint logic keys verified.", "admin", function() {
+    if (currentDayLog.length === 0 && currentRefundLog.length === 0) return alert("Nothing to save.");
+    if (!confirm("End current shift and save to vault?")) return;
+    openPinModal("Enter Admin PIN", "admin", function() {
         let netItems = 0; let grossItemsCount = 0; let summary = {};
         currentDayLog.forEach(log => { 
             netItems += log.qty; grossItemsCount += log.qty;
@@ -604,12 +597,12 @@ function endDay() {
     });
 }
 
-// Global Modal Input Keyboard Event Hook Key Listener Hooks
+// Global Event Listeners
 document.getElementById('modal-pin-input').addEventListener('keypress', function(e) { if (e.key === 'Enter') submitPinModal(); });
 document.getElementById('cust-modal-name-input').addEventListener('keypress', function(e) { if (e.key === 'Enter') submitCustomerModal(); });
 document.getElementById('void-token-number-input').addEventListener('keypress', function(e) { if (e.key === 'Enter') submitPosVoidLookup(); });
 
-// Application Bootup Trigger Execution
+// Application Boot
 renderCategoryFilters();
 renderMenu();
 renderLogs();
