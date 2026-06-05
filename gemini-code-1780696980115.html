@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AHMED HANIF RAJPUT - POS System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="brand-title">AHMED HANIF RAJPUT</div>
+        <nav class="nav-tabs">
+            <button class="tab-btn active" id="btn-pos-tab" onclick="switchView('pos-tab')">Counter POS</button>
+            <button class="tab-btn" id="btn-logs-tab" onclick="switchView('logs-tab')">Live Logs</button>
+            <button class="tab-btn" id="btn-history-tab" onclick="switchView('history-tab')">Vault Ledger</button>
+            <button class="tab-btn" onclick="attemptOpenCustomers()">Profiles Config</button>
+            <button class="tab-btn" onclick="attemptOpenConsumption">Analytics Engine</button>
+        </nav>
+    </header>
+
+    <main class="workspace-container">
+        
+        <section id="pos-tab" class="tab-content active">
+            <div class="pos-layout">
+                <div class="menu-workspace">
+                    <div id="category-filter-container" class="category-bar"></div>
+                    <div id="items-grid" class="items-grid"></div>
+                </div>
+
+                <div class="control-panel">
+                    <div class="panel-section">
+                        <h3>Active Queue Buffer</h3>
+                        <div id="cart-container" class="cart-container"></div>
+                        <div class="cart-actions-grid">
+                            <button class="btn-primary" onclick="printTokens()">Print Token Order</button>
+                            <button class="btn-danger-outline" onclick="openPosVoidModal()">Void via Token ID</button>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h3>Live Shift Inventory Metrics</h3>
+                        <div id="live-total-container"></div>
+                        <div class="shift-actions-grid">
+                            <button class="btn-accent" onclick="attemptStartNewDay()">Open New Shift</button>
+                            <button class="btn-danger" onclick="endDay()">End Active Shift</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="logs-tab" class="tab-content">
+            <div class="logs-layout">
+                <div class="log-card">
+                    <h3>Active Operational Sales Log Stream</h3>
+                    <div class="table-wrapper">
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Token ID</th>
+                                    <th>Timestamp</th>
+                                    <th>Registry Profile Name</th>
+                                    <th>Item Target</th>
+                                    <th>Quantity Mapping</th>
+                                </tr>
+                            </thead>
+                            <tbody id="live-log"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="log-card">
+                    <h3>Terminated Void Audit Trail</h3>
+                    <div class="table-wrapper">
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Token ID</th>
+                                    <th>Timestamp</th>
+                                    <th>Registry Profile Name</th>
+                                    <th>Item Target</th>
+                                    <th>Quantity Matrix</th>
+                                </tr>
+                            </thead>
+                            <tbody id="refund-log"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="history-tab" class="tab-content">
+            <div class="ledger-actions">
+                <h2>Historical Shift Vault Registries</h2>
+                <button class="btn-danger-outline" onclick="clearAllHistory()">Wipe Master History Index</button>
+            </div>
+            <div id="history-container" class="history-grid"></div>
+        </section>
+
+        <section id="customers-tab" class="tab-content">
+            <div class="config-grid">
+                <div class="panel-section">
+                    <h3>Profile Directory Management</h3>
+                    <div class="search-box">
+                        <input type="text" id="customer-search-input" class="input-field" placeholder="Search accounts..." oninput="handleCustomerSearchFilter()">
+                    </div>
+                    <div class="inline-form">
+                        <input type="text" id="new-manual-customer" class="input-field" placeholder="Add custom profile name...">
+                        <button class="btn-primary" onclick="addCustomerManually()">Register</button>
+                    </div>
+                    <div id="customer-management-list"></div>
+                </div>
+                
+                <div class="panel-section">
+                    <h3>Profile Consolidation & Merging Engine</h3>
+                    <div class="select-form">
+                        <select id="merge-source-select" class="input-field"></select>
+                        <select id="merge-target-select" class="input-field"></select>
+                        <button class="btn-danger" onclick="executeCustomerMerge()">Execute Profile Merge</button>
+                    </div>
+                    <div id="menu-weights-management-container"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="secure-pin-modal" class="modal-backdrop">
+        <div class="modal-card">
+            <h3 id="modal-title-text">Verification Checkpoint</h3>
+            <input type="password" id="modal-pin-input" class="input-field centralized" placeholder="••••••">
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closePinModal()">Abort</button>
+                <button class="btn-accent" onclick="submitPinModal()">Verify Credentials</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="pos-void-input-modal" class="modal-backdrop">
+        <div class="modal-card">
+            <h3>POS Counter Void Matrix</h3>
+            <p>Input target Token Number reference key string below:</p>
+            <input type="number" id="void-token-number-input" class="input-field centralized" placeholder="e.g. 1001">
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closePosVoidModal()">Cancel</button>
+                <button class="btn-primary" onclick="submitPosVoidLookup()">Query Log Instance</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="pos-void-confirm-modal" class="modal-backdrop">
+        <div class="modal-card detailed-confirm">
+            <div class="alert-header-pill">⚠️ Transaction Audit Verification</div>
+            <h3>Verify Targeted Entry Details</h3>
+            <div class="verification-data-box" id="void-confirmation-details-box"></div>
+            <p class="warning-text">Confirm terminal data mutation override execution string? Data will be cleanly archived to Void logs.</p>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closePosVoidConfirmModal()">Abort Overwrite</button>
+                <button class="btn-danger" onclick="executeConfirmedPosVoid()">Execute Terminal Mutation</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="customer-name-modal" class="modal-backdrop">
+        <div class="modal-card">
+            <h3>Identity Mapping Profile Target</h3>
+            <input type="text" id="cust-modal-name-input" class="input-field" placeholder="Enter name or scan index token..." list="customer-memory-list">
+            <datalist id="customer-memory-list"></datalist>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeCustomerModal()">Cancel</button>
+                <button class="btn-primary" onclick="submitCustomerModal()">Assign & Print</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="print-area"></div>
+
+</body>
+</html>
