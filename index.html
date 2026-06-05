@@ -14,8 +14,7 @@
             <button class="tab-btn active" id="btn-pos-tab" onclick="switchView('pos-tab')">Counter POS</button>
             <button class="tab-btn" id="btn-logs-tab" onclick="switchView('logs-tab')">Live Logs</button>
             <button class="tab-btn" id="btn-history-tab" onclick="switchView('history-tab')">Vault Ledger</button>
-            <button class="tab-btn" onclick="attemptOpenCustomers()">Profiles Config</button>
-            <button class="tab-btn" onclick="attemptOpenConsumption">Analytics Engine</button>
+            <button class="tab-btn" id="btn-customers-tab" onclick="attemptOpenCustomers()">Profiles Config</button>
         </nav>
     </header>
 
@@ -105,21 +104,20 @@
                     <div class="search-box">
                         <input type="text" id="customer-search-input" class="input-field" placeholder="Search accounts..." oninput="handleCustomerSearchFilter()">
                     </div>
-                    <div class="inline-form">
+                    <div class="inline-form" style="margin-top: 10px; display: flex; gap: 10px;">
                         <input type="text" id="new-manual-customer" class="input-field" placeholder="Add custom profile name...">
                         <button class="btn-primary" onclick="addCustomerManually()">Register</button>
                     </div>
-                    <div id="customer-management-list"></div>
+                    <div id="customer-management-list" style="margin-top: 16px;"></div>
                 </div>
                 
                 <div class="panel-section">
                     <h3>Profile Consolidation & Merging Engine</h3>
-                    <div class="select-form">
+                    <div class="select-form" style="display: flex; flex-direction: column; gap: 10px;">
                         <select id="merge-source-select" class="input-field"></select>
                         <select id="merge-target-select" class="input-field"></select>
                         <button class="btn-danger" onclick="executeCustomerMerge()">Execute Profile Merge</button>
                     </div>
-                    <div id="menu-weights-management-container"></div>
                 </div>
             </div>
         </section>
@@ -175,5 +173,6 @@
 
     <div id="print-area"></div>
 
+    <script src="script.js"></script>
 </body>
 </html>
