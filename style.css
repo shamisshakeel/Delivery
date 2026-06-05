@@ -1,4 +1,3 @@
-/* Core Styling Variables Matrix */
 :root {
     --bg-main: #f8fafc;
     --bg-surface: #ffffff;
@@ -25,7 +24,6 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* Header Layout Styles */
 .main-header {
     background-color: var(--accent);
     color: white;
@@ -70,7 +68,6 @@ body {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Master Grid Workspace Enclosures */
 .workspace-container {
     padding: 24px;
     max-width: 1600px;
@@ -85,7 +82,6 @@ body {
     display: block;
 }
 
-/* POS Counter Interface Subcomponents */
 .pos-layout {
     display: grid;
     grid-template-columns: 1fr 400px;
@@ -150,7 +146,6 @@ body {
     border-color: var(--primary);
 }
 
-/* Right Control Column Panels */
 .control-panel {
     display: flex;
     flex-direction: column;
@@ -216,7 +211,6 @@ body {
     grid-template-columns: 1.4fr 1fr;
 }
 
-/* Form Fields & Typography Elements */
 .input-field {
     width: 100%;
     padding: 12px;
@@ -237,7 +231,6 @@ body {
     letter-spacing: 2px;
 }
 
-/* Generic Button Matrix Definitions */
 button {
     font-weight: 600;
     font-size: 14px;
@@ -258,7 +251,6 @@ button {
 .btn-secondary { background-color: #e2e8f0; color: var(--text-main); }
 .btn-secondary:hover { background-color: #cbd5e1; }
 
-/* Interactive Modals Design Ecosystem */
 .modal-backdrop {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
@@ -281,7 +273,6 @@ button {
 .modal-card p { color: var(--text-muted); font-size: 14px; margin-bottom: 16px; }
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
 
-/* Expanded Confirm Layout */
 .modal-card.detailed-confirm { max-width: 480px; }
 .alert-header-pill {
     background-color: #fef3c7; color: #d97706;
@@ -298,7 +289,6 @@ button {
 .confirm-row:last-child { margin-bottom: 0; }
 .warning-text { color: var(--danger) !important; font-weight: 600; font-size: 13px !important; }
 
-/* Logs View Framework Tables Grid */
 .logs-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -321,7 +311,6 @@ button {
 .styled-table td { padding: 12px; border-bottom: 1px solid var(--border); }
 .styled-table tbody tr:hover { background-color: #f1f5f9; }
 
-/* Status Labels & Highlights */
 .pill-token {
     background-color: #e0f2fe; color: #0369a1;
     font-weight: 800; padding: 2px 6px; border-radius: 4px; font-family: monospace;
@@ -330,8 +319,12 @@ button {
     background-color: var(--danger-bg); color: var(--danger);
     font-weight: 800; padding: 2px 6px; border-radius: 4px; font-family: monospace;
 }
+.config-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
 
-/* Thermal Printer Spool Routing Layer Override CSS rules */
 @media print {
     body * { visibility: hidden; }
     #print-area, #print-area * { visibility: visible; }
