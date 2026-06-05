@@ -1,0 +1,349 @@
+/* Core Styling Variables Matrix */
+:root {
+    --bg-main: #f8fafc;
+    --bg-surface: #ffffff;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --accent: #0f172a;
+    --accent-hover: #1e293b;
+    --danger: #dc2626;
+    --danger-hover: #b91c1c;
+    --danger-bg: #fee2e2;
+    --success-bg: #dcfce7;
+    --border: #e2e8f0;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --radius: 12px;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Header Layout Styles */
+.main-header {
+    background-color: var(--accent);
+    color: white;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.brand-title {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.nav-tabs {
+    display: flex;
+    gap: 8px;
+    height: 100%;
+    align-items: center;
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tab-btn:hover, .tab-btn.active {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Master Grid Workspace Enclosures */
+.workspace-container {
+    padding: 24px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* POS Counter Interface Subcomponents */
+.pos-layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 24px;
+    align-items: start;
+}
+
+.category-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.category-filter-btn {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: var(--shadow);
+    transition: all 0.15s;
+}
+
+.category-filter-btn.active {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+}
+
+.menu-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border);
+    padding: 24px 16px;
+    border-radius: var(--radius);
+    text-align: center;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s, box-shadow 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
+}
+
+.menu-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05);
+    border-color: var(--primary);
+}
+
+/* Right Control Column Panels */
+.control-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.panel-section {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+}
+
+.panel-section h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+}
+
+.cart-container {
+    min-height: 160px;
+    max-height: 320px;
+    overflow-y: auto;
+    margin-bottom: 16px;
+}
+
+.cart-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border);
+}
+
+.qty-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qty-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background-color: var(--bg-main);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.cart-actions-grid, .shift-actions-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+.cart-actions-grid {
+    grid-template-columns: 1.4fr 1fr;
+}
+
+/* Form Fields & Typography Elements */
+.input-field {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+    background-color: var(--bg-main);
+}
+.input-field:focus {
+    outline: 2px solid var(--primary);
+    background-color: white;
+}
+.input-field.centralized {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+/* Generic Button Matrix Definitions */
+button {
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.btn-primary { background-color: var(--primary); color: white; }
+.btn-primary:hover { background-color: var(--primary-hover); }
+.btn-accent { background-color: var(--accent); color: white; }
+.btn-accent:hover { background-color: var(--accent-hover); }
+.btn-danger { background-color: var(--danger); color: white; }
+.btn-danger:hover { background-color: var(--danger-hover); }
+.btn-danger-outline { background: transparent; border: 1px solid var(--danger); color: var(--danger); }
+.btn-danger-outline:hover { background-color: var(--danger-bg); }
+.btn-secondary { background-color: #e2e8f0; color: var(--text-main); }
+.btn-secondary:hover { background-color: #cbd5e1; }
+
+/* Interactive Modals Design Ecosystem */
+.modal-backdrop {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.modal-card {
+    background-color: var(--bg-surface);
+    padding: 24px;
+    border-radius: var(--radius);
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+}
+.modal-card h3 { margin-top: 0; margin-bottom: 12px; font-size: 18px; }
+.modal-card p { color: var(--text-muted); font-size: 14px; margin-bottom: 16px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+
+/* Expanded Confirm Layout */
+.modal-card.detailed-confirm { max-width: 480px; }
+.alert-header-pill {
+    background-color: #fef3c7; color: #d97706;
+    padding: 6px 12px; font-size: 12px; font-weight: 700;
+    border-radius: 20px; display: inline-block; margin-bottom: 12px;
+}
+.verification-data-box {
+    background-color: var(--bg-main); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px; margin: 14px 0;
+}
+.confirm-row {
+    display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 14px;
+}
+.confirm-row:last-child { margin-bottom: 0; }
+.warning-text { color: var(--danger) !important; font-weight: 600; font-size: 13px !important; }
+
+/* Logs View Framework Tables Grid */
+.logs-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+.log-card {
+    background-color: var(--bg-surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow);
+}
+.log-card h3 { margin-top: 0; font-size: 16px; color: var(--text-main); }
+.table-wrapper { overflow-y: auto; max-height: 550px; }
+
+.styled-table {
+    width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;
+}
+.styled-table th {
+    background-color: var(--bg-main); padding: 12px; font-weight: 700;
+    color: var(--text-muted); border-bottom: 2px solid var(--border);
+}
+.styled-table td { padding: 12px; border-bottom: 1px solid var(--border); }
+.styled-table tbody tr:hover { background-color: #f1f5f9; }
+
+/* Status Labels & Highlights */
+.pill-token {
+    background-color: #e0f2fe; color: #0369a1;
+    font-weight: 800; padding: 2px 6px; border-radius: 4px; font-family: monospace;
+}
+.pill-void {
+    background-color: var(--danger-bg); color: var(--danger);
+    font-weight: 800; padding: 2px 6px; border-radius: 4px; font-family: monospace;
+}
+
+/* Thermal Printer Spool Routing Layer Override CSS rules */
+@media print {
+    body * { visibility: hidden; }
+    #print-area, #print-area * { visibility: visible; }
+    #print-area { position: absolute; left: 0; top: 0; width: 58mm; }
+    .pos-token {
+        width: 58mm; padding: 4mm 2mm; font-family: monospace; font-size: 12px;
+        color: #000; line-break: anywhere; page-break-after: always;
+    }
+    .brand-main { font-size: 14px; font-weight: 900; text-align: center; margin-bottom: 2mm; }
+    .pos-divider { border-bottom: 1px dashed #000; margin: 2mm 0; }
+    .item-container { margin: 3mm 0; }
+    .pos-item { font-size: 15px; font-weight: 900; }
+    .pos-qty { font-size: 13px; margin-top: 1mm; }
+    .meta-line { font-size: 10px; margin-top: 1mm; }
+}
